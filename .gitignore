@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+.vscode/
+labs/lab01/data/*.csv
+labs/lab01/data/*.json
+labs/lab01/data/

@@ -73,22 +73,35 @@ def create_users(
             print(f"[ПОМИЛКА ВАЛІДАЦІЇ] Користувач '{username}': {error}")
         except ValueError as error:
             print(f"[ПОМИЛКА ЗНАЧЕННЯ] Користувач '{username}': {error}")
+    try:
+        with open(CSV_FILE, "w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(["username", "password_hash"])
+            writer.writerows(registered_users)
 
-    with open(CSV_FILE, "w", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow(["username", "password_hash"])
-        writer.writerows(registered_users)
+        print(f"CSV-базу успішно створено: {CSV_FILE}")
 
-    print(f"CSV-базу успішно створено: {CSV_FILE}")
+    except PermissionError as error:
+        print(f"[PERMISSION ERROR]: {error}")
+    except OSError as error:
+        print(f"[IO ERROR]: {error}")
 
 
 def read_users() -> list[dict[str, str]]:
     """Зчитує користувачів із CSV-файлу у список словників."""
     users = []
-    with open(CSV_FILE, encoding="utf-8") as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            users.append(row)
+    try:
+        with open(CSV_FILE, encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                users.append(row)
+    except FileNotFoundError as error:
+        print(f"[FILE NOT FOUND]: {error}")
+    except PermissionError as error:
+        print(f"[PERMISSION ERROR]: {error}")
+    except OSError as error:
+        print(f"[IO ERROR]: {error}")
+
     return users
 
 
@@ -149,15 +162,23 @@ def log_event(func):
 @log_event
 def login(username: str, password: str) -> bool:
     """Перевіряє логін і пароль користувача."""
-    if not username or not password:
-        raise ValueError("Логін і пароль не можуть бути порожніми")
+    try:
+        if not username or not password:
+            raise ValueError("Логін і пароль не можуть бути порожніми")
 
-    salt = f"{VARIANT_NUMBER:05d}"
-    entered_hash = generate_hash(password, salt)
+        salt = f"{VARIANT_NUMBER:05d}"
+        entered_hash = generate_hash(password, salt)
 
-    for user in users_db:
-        if user["username"] == username:
-            return user["password_hash"] == entered_hash
+        for user in users_db:
+            if user["username"] == username:
+                return user["password_hash"] == entered_hash
+
+    except ValidationError as error:
+        print(f"[VALIDATION ERROR]: {error}")
+        return False
+    except ValueError as error:
+        print(f"[VALUE ERROR]: {error}")
+        return False
 
     return False
 
@@ -186,41 +207,28 @@ def main() -> None:
         ("support", "SupportServicePass888#"),
     )
 
-    try:
-        print("\n[1] Створення бази користувачів...")
-        create_users(users_to_register)
+    print("\n[1] Створення бази користувачів...")
+    create_users(users_to_register)
+    print("\n[2] Зчитування CSV-бази...")
+    loaded_users = read_users()
+    users_db.clear()
+    users_db.extend(loaded_users)
+    print_users_table(users_db)
 
-        print("\n[2] Зчитування CSV-бази...")
-        loaded_users = read_users()
-        users_db.clear()
-        users_db.extend(loaded_users)
-        print_users_table(users_db)
+    print("\n[3] Тестування автентифікації...")
+    res1 = login("admin", "SuperSecurePass123!")
+    status1 = "УСПІХ" if res1 else "НЕВДАЧА"
+    print(f"1. admin (правильний пароль): {status1}")
 
-        print("\n[3] Тестування автентифікації...")
-        res1 = login("admin", "SuperSecurePass123!")
-        status1 = "УСПІХ" if res1 else "НЕВДАЧА"
-        print(f"1. admin (правильний пароль): {status1}")
+    res2 = login("admin", "WrongPassword12345!")
+    status2 = "УСПІХ" if res2 else "НЕВДАЧА"
+    print(f"2. admin (неправильний пароль): {status2}")
 
-        res2 = login("admin", "WrongPassword12345!")
-        status2 = "УСПІХ" if res2 else "НЕВДАЧА"
-        print(f"2. admin (неправильний пароль): {status2}")
+    res3 = login("unknown", "SomePassword12345!")
+    status3 = "УСПІХ" if res3 else "НЕВДАЧА"
+    print(f"3. Неіснуючий користувач: {status3}")
 
-        res3 = login("unknown", "SomePassword12345!")
-        status3 = "УСПІХ" if res3 else "НЕВДАЧА"
-        print(f"3. Неіснуючий користувач: {status3}")
-
-        print(f"\nСпроби авторизації успішно записано у {LOG_FILE}")
-
-    except FileNotFoundError as error:
-        print(f"[FILE NOT FOUND]: {error}")
-    except PermissionError as error:
-        print(f"[PERMISSION ERROR]: {error}")
-    except OSError as error:
-        print(f"[IO ERROR]: {error}")
-    except ValidationError as error:
-        print(f"[VALIDATION ERROR]: {error}")
-    except ValueError as error:
-        print(f"[VALUE ERROR]: {error}")
+    print(f"\nСпроби авторизації успішно записано у {LOG_FILE}")
 
 
 if __name__ == "__main__":

@@ -87,19 +87,13 @@ def run_task2() -> None:
     )
     print("=" * 60)
 
-    print("\nСПИСОК РЕСУРСІВ СИСТЕМИ:")
     print(
-        f"{'Назва ресурсу':<25} | "
-        f"{'Числовий рівень':<15} | "
-        f"{'Текстовий рівень'}",
+        "\nСПИСОК РЕСУРСІВ СИСТЕМИ:\n"
+        + f"{'Назва ресурсу':<25} | {'Числовий рівень':<15} | {'Текстовий рівень'}\n"
+        + "-" * 65
     )
-    print("-" * 65)
-
     for res_name, level in RESOURCES:
-        text_level = SECURITY_LEVELS[level - 1]
-        print(
-            f"{res_name:<25} | {level:<15} | {text_level}",
-        )
+        print(f"{res_name:<25} | {level:<15} | {SECURITY_LEVELS[level - 1]}")
 
     print("\nРЕЗУЛЬТАТИ ПЕРЕВІРКИ ДОСТУПУ:")
     print("-" * 65)
