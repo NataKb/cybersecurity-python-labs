@@ -37,52 +37,60 @@ def setup_logging(log_file: Path | None = None) -> None:
 
 
 def analyze_activity(activity_log_path: Path, after_hours_only: bool = False) -> dict:
-    if not activity_log_path.exists():
-        logger.error(f"Файл {activity_log_path} не знайдено!")
-        raise FileNotFoundError(f"Файл {activity_log_path} не знайдено.")
-
     logger.info(f"Reading user activity log {activity_log_path}...")
 
     total_records = 0
+
     off_hours_alerts = []
     user_requests_per_min: dict[str, dict[str, dict[str, int]]] = defaultdict(
         lambda: defaultdict(lambda: defaultdict(int))
     )
 
-    with open(activity_log_path, mode="r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
+    try:
+        with open(activity_log_path, mode="r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
 
-        for row in reader:
-            total_records += 1
+            for row in reader:
+                total_records += 1
 
-            user = row["UserID"]
-            action = row["Action"]
-            resource = row["Resource"]
-            ip = row["IP"]
-            ts_str = row["Timestamp"]
+                user = row["UserID"]
+                action = row["Action"]
+                resource = row["Resource"]
+                ip = row["IP"]
+                ts_str = row["Timestamp"]
 
-            ts = datetime.fromisoformat(ts_str)
+                ts = datetime.fromisoformat(ts_str)
 
-            is_night = ts.hour >= 22 or ts.hour < 6
-            is_weekend = ts.weekday() in (5, 6)
+                is_night = ts.hour >= 22 or ts.hour < 6
+                is_weekend = ts.weekday() in (5, 6)
 
-            if is_night or is_weekend:
-                alert = {
-                    "user": user,
-                    "action": action,
-                    "resource": resource,
-                    "ip": ip,
-                    "timestamp": ts_str,
-                    "reason": ("Weekend" if is_weekend else "Off-Hours Night"),
-                }
-                off_hours_alerts.append(alert)
-                logger.warning(
-                    f"User '{user}' performed action '{action}' "
-                    f"at {ts_str} (Resource: {resource}, IP: {ip})"
-                )
+                if is_night or is_weekend:
+                    alert = {
+                        "user": user,
+                        "action": action,
+                        "resource": resource,
+                        "ip": ip,
+                        "timestamp": ts_str,
+                        "reason": "Weekend" if is_weekend else "Off-Hours Night",
+                    }
+                    off_hours_alerts.append(alert)
+                    logger.warning(
+                        f"User '{user}' performed action '{action}' "
+                        f"at {ts_str} (Resource: {resource}, IP: {ip})"
+                    )
 
-            minute_key = ts.strftime("%Y-%m-%d %H:%M")
-            user_requests_per_min[user][minute_key][resource] += 1
+                minute_key = ts.strftime("%Y-%m-%d %H:%M")
+                user_requests_per_min[user][minute_key][resource] += 1
+
+    except FileNotFoundError as error:
+        print(f"[FILE NOT FOUND]: {error}")
+        return {}
+    except PermissionError as error:
+        print(f"[PERMISSION ERROR]: {error}")
+        return {}
+    except OSError as error:
+        print(f"[IO ERROR]: {error}")
+        return {}
 
     logger.info(f"Total records processed: {total_records}.")
 
@@ -171,6 +179,8 @@ def main() -> None:
         args.activity_log,
         args.after_hours,
     )
+    if not report_data:
+        return
 
     if args.out_report:
         args.out_report.parent.mkdir(parents=True, exist_ok=True)

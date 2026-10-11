@@ -1,5 +1,3 @@
-"""Завдання 1. Модуль моделей користувачів, безпечних сесій та аудиту."""
-
 import hashlib
 import hmac
 import os
@@ -9,6 +7,15 @@ from datetime import datetime, timezone
 from typing import Any
 
 SESSION_TIMEOUT_SEC = 900
+
+
+# ПРАВКА 1: Додано класи винятків (ексепти)
+class AuthError(Exception):
+    """Базовий клас винятків для помилок аутентифікації."""
+
+
+class InvalidEmailError(ValueError, AuthError):
+    """Виникає при спробі встановити некоректний email."""
 
 
 class User:
@@ -30,7 +37,8 @@ class User:
     def email(self, value: str) -> None:
         pattern = r"^[a-zA-Z][a-zA-Z0-9._%+-]{2,63}@[\w\.-]+\.\w+$"
         if not re.match(pattern, value):
-            raise ValueError(f"Некоректний формат email: {value}")
+            # ПРАВКА 2: Перевірка неправильного email через raise InvalidEmailError
+            raise InvalidEmailError(f"Некоректний формат email: {value}")
         self._email = value
 
     def set_password(self, password: str) -> None:
@@ -166,14 +174,51 @@ class UserAccount:
             "session": self.session,
             "audit_log": self.audit_log,
         }
-        if key not in allowed:
+        # ПРАВКА 3: Обробка винятку (ексепта) KeyError
+        try:
+            return allowed[key]
+        except KeyError:
             raise KeyError(f"Ключ '{key}' недоступний чи заборонений.")
-        return allowed[key]
 
     def __setitem__(self, key: str, value: Any) -> None:
-        if key == "user" and isinstance(value, User):
-            self.user = value
-        elif key == "session" and (isinstance(value, Session) or value is None):
-            self.session = value
-        else:
+        # ПРАВКА 4: Обробка винятку (ексепта) TypeError
+        try:
+            if key == "user" and isinstance(value, User):
+                self.user = value
+            elif key == "session" and (isinstance(value, Session) or value is None):
+                self.session = value
+            else:
+                raise TypeError
+        except TypeError:
             raise TypeError(f"Неможливо встановити значення для ключа '{key}'")
+
+
+def main() -> None:
+    print("=== Завдання 1: ООП та InvalidEmailError ===")
+
+    user = User("student01", "student@example.com")
+    user.set_password("password123")
+
+    print(user)
+    print("Перевірка правильного пароля:", user.check_password("password123"))
+    print("Перевірка неправильного пароля:", user.check_password("wrong"))
+
+    admin = Admin("admin01", "admin@example.com", {"read", "write"})
+    print(admin)
+    print("Дозвіл write:", admin.has_permission("write"))
+
+    account = UserAccount(user)
+    print("Успішний вхід:", account.login("student01", "password123", "127.0.0.1"))
+    print("Автентифіковано:", account.is_authenticated())
+
+    try:
+        User("invalid", "invalid-email")
+    except InvalidEmailError as error:
+        print("Перехоплено виняток:", error)
+
+    print("\nЖурнал подій:")
+    account.audit_log.show_all()
+
+
+if __name__ == "__main__":
+    main()

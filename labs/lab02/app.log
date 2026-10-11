@@ -1,0 +1,48 @@
+[INFO] Reading user activity log data\data_v07\activity.csv...
+[WARNING] User 'u002' performed action 'DOWNLOAD' at 2026-09-21T23:40:00 (Resource: /finance/payroll.csv, IP: 10.0.1.20)
+[WARNING] User 'u003' performed action 'READ' at 2026-09-22T05:20:00 (Resource: /prod/secrets, IP: 10.0.1.30)
+[WARNING] User 'u005' performed action 'DOWNLOAD' at 2026-09-24T22:05:00 (Resource: /finance/budget.xlsx, IP: 10.0.1.50)
+[WARNING] User 'u001' performed action 'READ' at 2026-09-26T10:00:00 (Resource: /docs/weekend.txt, IP: 10.0.1.10)
+[WARNING] User 'u003' performed action 'DELETE' at 2026-09-27T13:00:00 (Resource: /tmp/report.csv, IP: 10.0.1.30)
+[INFO] Total records processed: 29.
+[INFO] Anomalous activity report written to report.json
+[INFO] Reading user activity log data\data_v07\activity.csv...
+[WARNING] User 'u002' performed action 'DOWNLOAD' at 2026-09-21T23:40:00 (Resource: /finance/payroll.csv, IP: 10.0.1.20)
+[WARNING] User 'u003' performed action 'READ' at 2026-09-22T05:20:00 (Resource: /prod/secrets, IP: 10.0.1.30)
+[WARNING] User 'u005' performed action 'DOWNLOAD' at 2026-09-24T22:05:00 (Resource: /finance/budget.xlsx, IP: 10.0.1.50)
+[WARNING] User 'u001' performed action 'READ' at 2026-09-26T10:00:00 (Resource: /docs/weekend.txt, IP: 10.0.1.10)
+[WARNING] User 'u003' performed action 'DELETE' at 2026-09-27T13:00:00 (Resource: /tmp/report.csv, IP: 10.0.1.30)
+[INFO] Total records processed: 29.
+[INFO] Anomalous activity report written to report.json
+[INFO] Reading user activity log data\data_v07\activity.csv...
+[WARNING] User 'u002' performed action 'DOWNLOAD' at 2026-09-21T23:40:00 (Resource: /finance/payroll.csv, IP: 10.0.1.20)
+[WARNING] User 'u003' performed action 'READ' at 2026-09-22T05:20:00 (Resource: /prod/secrets, IP: 10.0.1.30)
+[WARNING] User 'u005' performed action 'DOWNLOAD' at 2026-09-24T22:05:00 (Resource: /finance/budget.xlsx, IP: 10.0.1.50)
+[WARNING] User 'u001' performed action 'READ' at 2026-09-26T10:00:00 (Resource: /docs/weekend.txt, IP: 10.0.1.10)
+[WARNING] User 'u003' performed action 'DELETE' at 2026-09-27T13:00:00 (Resource: /tmp/report.csv, IP: 10.0.1.30)
+[INFO] Total records processed: 29.
+[INFO] Anomalous activity report written to report.json
+[INFO] Reading user activity log data\data_v07\activity.csv...
+[WARNING] User 'u002' performed action 'DOWNLOAD' at 2026-09-21T23:40:00 (Resource: /finance/payroll.csv, IP: 10.0.1.20)
+[WARNING] User 'u003' performed action 'READ' at 2026-09-22T05:20:00 (Resource: /prod/secrets, IP: 10.0.1.30)
+[WARNING] User 'u005' performed action 'DOWNLOAD' at 2026-09-24T22:05:00 (Resource: /finance/budget.xlsx, IP: 10.0.1.50)
+[WARNING] User 'u001' performed action 'READ' at 2026-09-26T10:00:00 (Resource: /docs/weekend.txt, IP: 10.0.1.10)
+[WARNING] User 'u003' performed action 'DELETE' at 2026-09-27T13:00:00 (Resource: /tmp/report.csv, IP: 10.0.1.30)
+[INFO] Total records processed: 29.
+[INFO] Anomalous activity report written to report.json
+[INFO] Reading user activity log data\data_v07\activity.csv...
+[WARNING] User 'u002' performed action 'DOWNLOAD' at 2026-09-21T23:40:00 (Resource: /finance/payroll.csv, IP: 10.0.1.20)
+[WARNING] User 'u003' performed action 'READ' at 2026-09-22T05:20:00 (Resource: /prod/secrets, IP: 10.0.1.30)
+[WARNING] User 'u005' performed action 'DOWNLOAD' at 2026-09-24T22:05:00 (Resource: /finance/budget.xlsx, IP: 10.0.1.50)
+[WARNING] User 'u001' performed action 'READ' at 2026-09-26T10:00:00 (Resource: /docs/weekend.txt, IP: 10.0.1.10)
+[WARNING] User 'u003' performed action 'DELETE' at 2026-09-27T13:00:00 (Resource: /tmp/report.csv, IP: 10.0.1.30)
+[INFO] Total records processed: 29.
+[INFO] Anomalous activity report written to report.json
+[INFO] Reading user activity log data\data_v07\activity.csv...
+[WARNING] User 'u002' performed action 'DOWNLOAD' at 2026-09-21T23:40:00 (Resource: /finance/payroll.csv, IP: 10.0.1.20)
+[WARNING] User 'u003' performed action 'READ' at 2026-09-22T05:20:00 (Resource: /prod/secrets, IP: 10.0.1.30)
+[WARNING] User 'u005' performed action 'DOWNLOAD' at 2026-09-24T22:05:00 (Resource: /finance/budget.xlsx, IP: 10.0.1.50)
+[WARNING] User 'u001' performed action 'READ' at 2026-09-26T10:00:00 (Resource: /docs/weekend.txt, IP: 10.0.1.10)
+[WARNING] User 'u003' performed action 'DELETE' at 2026-09-27T13:00:00 (Resource: /tmp/report.csv, IP: 10.0.1.30)
+[INFO] Total records processed: 29.
+[INFO] Anomalous activity report written to report.json
