@@ -5,3 +5,8 @@ __pycache__/
 labs/lab01/data/*.csv
 labs/lab01/data/*.json
 labs/lab01/data/
+# Ігнорування файлів бази даних для ЛР №3
+labs/lab03/data/*.sqlite3
+labs/lab03/data/*.sqlite3-*
+labs/lab03/data/*.db
+labs/lab03/data/*.db-*
